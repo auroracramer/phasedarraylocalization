@@ -112,5 +112,5 @@ def acquireSamplesAsync(fs, fc, t_total, chunk_size=1024, num_SDRs=3, gain=36):
 
 
 if __name__ == "__main__":
-    acquireSamplesAsync(fs=1e6, fc=96.3e6, t_total=1)
+    acquireSamplesAsync(fs=1e6, fc=443.61e6, t_total=3, gain=60, num_SDRs=2)
     exit(0)
