@@ -28,18 +28,18 @@ def recordSamples(sdr, idx, N_samples, y, chunk_size=1024):
         y.put(sdr.read_samples(chunk_size))
         samples_acquired += chunk_size
 
+    print "SDR %d: Acquired %d samples." % (idx, samples_acquired)
     sdr.close()
     #y.close()
     #y.join_thread()
     print "SDR %d: Closed as fuck." % idx
-    sys.stdout.flush()
-
-    return
+    # sys.stdout.flush()
+    # return
 
 
 def acquireSamplesAsync(fs, fc, t_total, chunk_size=1024, num_SDRs=3, gain=36):
     assert type(t_total) == int, "Time must be an integer."
-    N_samples = 1024000*t_total
+    N_samples = 256000*t_total #1024000
     SDRs = []
 
     # Initialize the SDRs
@@ -104,13 +104,18 @@ def acquireSamplesAsync(fs, fc, t_total, chunk_size=1024, num_SDRs=3, gain=36):
 
         print "Done"
 
+    np.save('LO_test_03.npy',samples)
+    for i in range(num_SDRs-1):
+        assert len(samples[i]) == len(samples[i+1])
+    
+    return samples
 
-    with open("parallel_samps.pkl", "wb") as f:
-        cPickle.dump(samples, f)
+    # with open("parallel_samps.pkl", "wb") as f:
+    #     cPickle.dump(samples, f)
 
-    return output_queues
+    # return output_queues
 
 
 if __name__ == "__main__":
-    acquireSamplesAsync(fs=1e6, fc=443.61e6, t_total=3, gain=60, num_SDRs=2)
-    exit(0)
+    acquireSamplesAsync(fs=240000, fc=443.61e6, t_total=6, gain=3, num_SDRs=2) #fs 1e6 #gain 60
+    # exit(0)
