@@ -39,7 +39,7 @@ def recordSamples(sdr, idx, N_samples, y, chunk_size=1024):
 
 def acquireSamplesAsync(fs, fc, t_total, chunk_size=1024, num_SDRs=3, gain=36):
     assert type(t_total) == int, "Time must be an integer."
-    N_samples = 256000*t_total #1024000
+    N_samples = 1024000*t_total #1024000 256000 3.2e6
     SDRs = []
 
     # Initialize the SDRs
@@ -104,7 +104,7 @@ def acquireSamplesAsync(fs, fc, t_total, chunk_size=1024, num_SDRs=3, gain=36):
 
         print "Done"
 
-    np.save('LO_test_04.npy',samples)
+    np.save('LO_test_10_tone.npy',samples)
     for i in range(num_SDRs-1):
         assert len(samples[i]) == len(samples[i+1])
     
@@ -117,5 +117,5 @@ def acquireSamplesAsync(fs, fc, t_total, chunk_size=1024, num_SDRs=3, gain=36):
 
 
 if __name__ == "__main__":
-    acquireSamplesAsync(fs=240000, fc=443.61e6, t_total=6, gain=3, num_SDRs=2) #fs 1e6 #gain 60
+    acquireSamplesAsync(fs=1e6, fc=315e6, t_total=2, gain=36, num_SDRs=2) #fs 3.2e6  240000 #gain 60 #fc 144.25e6
     # exit(0)
