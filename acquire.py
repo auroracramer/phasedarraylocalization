@@ -104,7 +104,7 @@ def acquireSamplesAsync(fs, fc, t_total, chunk_size=1024, num_SDRs=3, gain=36):
 
         print "Done"
 
-    np.save('LO_test_22_radio.npy',samples)
+    np.save('LO_test_23_radio.npy',samples)
     for i in range(num_SDRs-1):
         assert len(samples[i]) == len(samples[i+1])
     
