@@ -4,9 +4,7 @@ import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
 import pyaudio
-#import Queue
 
-#from multiprocessing import Process, Queue
 import threading
 from Queue import Queue
 import time
@@ -21,6 +19,9 @@ import cPickle
 
 
 def recordSamples(sdr, idx, N_samples, y, chunk_size=1024):
+    """
+    Records the samples in chunked acquisitions.
+    """
     samples_acquired = 0
     # Acquire the samples from an SDR
     while samples_acquired < N_samples:
@@ -30,15 +31,15 @@ def recordSamples(sdr, idx, N_samples, y, chunk_size=1024):
 
     print "SDR %d: Acquired %d samples." % (idx, samples_acquired)
     sdr.close()
-    #y.close()
-    #y.join_thread()
-    print "SDR %d: Closed as fuck." % idx
-    # sys.stdout.flush()
-    # return
+    print "SDR %d: Closed." % idx
 
 
 def acquireSamplesAsync(fs, fc, t_total, chunk_size=1024, num_SDRs=3, gain=36):
-    # assert type(t_total) == int, "Time must be an integer."
+    """
+    Asynchronously acquire samples and save them.
+    """
+
+    assert type(t_total) == int, "Time must be an integer."
     N_samples = 1024000*t_total #1024000 256000 3.2e6
     SDRs = []
 
@@ -67,10 +68,6 @@ def acquireSamplesAsync(fs, fc, t_total, chunk_size=1024, num_SDRs=3, gain=36):
         rec_thread.start()
 
 
-    """
-    last_size = [0 for _ in xrange(num_SDRs)]
-    done_arr = [False for _ in xrange(num_SDRs)]
-    """
     # Wait until threads are done
     while any([thrd.is_alive() for thrd in rec_thrds]):
         time.sleep(1)
@@ -84,14 +81,6 @@ def acquireSamplesAsync(fs, fc, t_total, chunk_size=1024, num_SDRs=3, gain=36):
                 last_size[i] = curr_size
         """
 
-
-
-
-    # Clean up the SDR objects
-    """
-    for sdr in SDRs:
-        sdr.close()
-    """
     # For DEBUG
     samples = []
     for i, q in enumerate(output_queues):
@@ -104,13 +93,12 @@ def acquireSamplesAsync(fs, fc, t_total, chunk_size=1024, num_SDRs=3, gain=36):
 
         print "Done"
 
-    np.save('LO_final_right_08.npy',samples)
+    np.save('demo.npy',samples)
     for i in range(num_SDRs-1):
         assert len(samples[i]) == len(samples[i+1])
-    
+
     return samples
 
 
 if __name__ == "__main__":
-    acquireSamplesAsync(fs=1e6, fc=433.9e6, t_total=1, gain=2, num_SDRs=2) #fs 1e6 3.2e6  240000 #fc 144.25e6 315e6 145.230e6 434e6 (transmitter)
-    # exit(0)
+    acquireSamplesAsync(fs=1e6, fc=434.1e6, t_total=1, gain=1, num_SDRs=2)
