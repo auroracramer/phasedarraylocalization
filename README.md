@@ -1,4 +1,9 @@
 # phasedarraylocalization
+Jason Cramer
+
+Lucine Oganesian
+
+
 An SDR phased array for the purpose of localization
 
 "Final Test.ipynb" shows the pipeline for the phased array system.
