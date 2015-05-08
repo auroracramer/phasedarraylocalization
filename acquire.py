@@ -104,18 +104,13 @@ def acquireSamplesAsync(fs, fc, t_total, chunk_size=1024, num_SDRs=3, gain=36):
 
         print "Done"
 
-    np.save('LO_barker_right_02_long.npy',samples)
+    np.save('LO_final_right_08.npy',samples)
     for i in range(num_SDRs-1):
         assert len(samples[i]) == len(samples[i+1])
     
     return samples
 
-    # with open("parallel_samps.pkl", "wb") as f:
-    #     cPickle.dump(samples, f)
-
-    # return output_queues
-
 
 if __name__ == "__main__":
-    acquireSamplesAsync(fs=1e6, fc=433.9e6, t_total=1, gain=10, num_SDRs=2) #fs 1e6 3.2e6  240000 #fc 144.25e6 315e6 145.230e6 434e6 (transmitter)
+    acquireSamplesAsync(fs=1e6, fc=433.9e6, t_total=1, gain=2, num_SDRs=2) #fs 1e6 3.2e6  240000 #fc 144.25e6 315e6 145.230e6 434e6 (transmitter)
     # exit(0)
